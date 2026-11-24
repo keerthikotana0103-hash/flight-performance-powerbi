@@ -1,0 +1,21 @@
+# Data (too large / not ours to redistribute)
+data/
+*.csv
+*.zip
+
+# Power BI
+*.pbix
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+
+# Secrets
+.env
+*.env
+*token*
+secrets/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

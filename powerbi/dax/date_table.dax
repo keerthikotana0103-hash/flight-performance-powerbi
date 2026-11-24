@@ -1,0 +1,25 @@
+// Alternative to flights_gold.dim_date: a DAX calculated date table.
+// Use ONE of them, not both. Interview answer on "which is better":
+//   - Build it upstream (Databricks / Power Query) when several models share it -> single source of truth.
+//   - DAX CALENDAR is fine for a quick, self-contained model.
+// Either way: Table tools -> Mark as date table -> choose [Date].
+
+Date (DAX) =
+VAR _start = DATE ( 2015, 1, 1 )
+VAR _end   = DATE ( 2015, 12, 31 )
+RETURN
+ADDCOLUMNS (
+    CALENDAR ( _start, _end ),
+    "Year",          YEAR ( [Date] ),
+    "Quarter",       "Q" & QUARTER ( [Date] ),
+    "Month Number",  MONTH ( [Date] ),
+    "Month",         FORMAT ( [Date], "MMMM" ),
+    "Month Short",   FORMAT ( [Date], "MMM" ),
+    "Year Month",    FORMAT ( [Date], "YYYY-MM" ),
+    "Day Name",      FORMAT ( [Date], "dddd" ),
+    "Day of Week",   WEEKDAY ( [Date], 2 ),          // 1 = Monday
+    "Is Weekend",    WEEKDAY ( [Date], 2 ) >= 6
+)
+
+// Remember: sort "Month" by "Month Number" and "Day Name" by "Day of Week"
+// (Column tools -> Sort by column), otherwise months sort alphabetically.

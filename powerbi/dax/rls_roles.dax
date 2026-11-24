@@ -1,0 +1,40 @@
+// =====================================================================
+// Row-Level Security (Modeling -> Manage roles)
+// Test with Modeling -> View as -> pick role (and "Other user" for dynamic).
+// =====================================================================
+
+// ---- 1. Static RLS: one role per airline ----
+// Role "American Airlines" -> table dim_airline, filter:
+[airline_code] = "AA"
+
+// ---- 2. Dynamic RLS: one role for everybody ----
+// Add a security table (e.g. flights_gold.sec_user_airline in Databricks, or Enter data):
+//   user_email            | airline_code
+//   analyst1@company.com  | AA
+//   analyst1@company.com  | DL
+//   manager@company.com   | *        (see variant below)
+// Option A: relate sec_user_airline -> dim_airline, filter the security table on
+//   [user_email] = USERPRINCIPALNAME(), and set the relationship to "Both" with
+//   "Apply security filter in both directions" (bidirectional = slower, more ambiguity risk).
+//
+// Option B (preferred) - no relationship, filter dim_airline directly:
+// Role "Airline Users" -> table dim_airline, filter:
+[airline_code]
+    IN CALCULATETABLE (
+        VALUES ( sec_user_airline[airline_code] ),
+        sec_user_airline[user_email] = USERPRINCIPALNAME ()
+    )
+
+// Variant with "see everything" users:
+VAR _codes =
+    CALCULATETABLE (
+        VALUES ( sec_user_airline[airline_code] ),
+        sec_user_airline[user_email] = USERPRINCIPALNAME ()
+    )
+RETURN
+    "*" IN _codes || [airline_code] IN _codes
+
+// Notes for interviews:
+// - RLS filters ROWS; Object-Level Security (OLS, via Tabular Editor) hides tables/columns.
+// - RLS applies to Viewers only; workspace Admin/Member/Contributor bypass it.
+// - In the Service: Semantic model -> Security -> add users/groups to the role.

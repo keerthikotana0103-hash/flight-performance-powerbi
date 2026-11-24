@@ -1,0 +1,153 @@
+// =====================================================================
+// Flight Performance - DAX measures
+// Create an empty table called "_Measures" (Enter data -> one blank column,
+// then delete the column) and put every measure in it, grouped in display folders.
+// =====================================================================
+
+// ---------- Display folder: 1 Volume ----------
+Total Flights =
+COUNTROWS ( fact_flights )
+
+Cancelled Flights =
+CALCULATE ( [Total Flights], fact_flights[is_cancelled] = 1 )
+
+Diverted Flights =
+CALCULATE ( [Total Flights], fact_flights[is_diverted] = 1 )
+
+Completed Flights =
+[Total Flights] - [Cancelled Flights] - [Diverted Flights]
+
+Total Distance (mi) =
+SUM ( fact_flights[distance_miles] )
+
+
+// ---------- Display folder: 2 Rates ----------
+Cancellation % =
+DIVIDE ( [Cancelled Flights], [Total Flights] )
+
+On-Time Flights =
+SUM ( fact_flights[is_on_time] )
+
+On-Time % =
+DIVIDE ( [On-Time Flights], [Total Flights] )
+
+Delayed Flights (15+) =
+CALCULATE ( [Total Flights], fact_flights[arr_delay_min] >= 15 )
+
+Delayed % =
+DIVIDE ( [Delayed Flights (15+)], [Completed Flights] )
+
+
+// ---------- Display folder: 3 Delay minutes ----------
+Avg Arrival Delay (min) =
+AVERAGE ( fact_flights[arr_delay_min] )          // AVERAGE ignores BLANKs (cancelled flights)
+
+Avg Delay of Delayed Flights (min) =
+CALCULATE ( AVERAGE ( fact_flights[arr_delay_min] ), fact_flights[arr_delay_min] >= 15 )
+
+Carrier Delay Min =        SUM ( fact_flights[delay_carrier_min] )
+Weather Delay Min =        SUM ( fact_flights[delay_weather_min] )
+NAS Delay Min =            SUM ( fact_flights[delay_nas_min] )
+Security Delay Min =       SUM ( fact_flights[delay_security_min] )
+Late Aircraft Delay Min =  SUM ( fact_flights[delay_late_aircraft_min] )
+
+Total Delay Cause Min =
+[Carrier Delay Min] + [Weather Delay Min] + [NAS Delay Min]
+    + [Security Delay Min] + [Late Aircraft Delay Min]
+
+// Iterator example (row context): average delay per mile flown, only completed flights
+Delay per 100 Miles =
+VAR _completed =
+    FILTER ( fact_flights, fact_flights[is_cancelled] = 0 && fact_flights[is_diverted] = 0 )
+RETURN
+    DIVIDE (
+        SUMX ( _completed, fact_flights[arr_delay_min] ),
+        SUMX ( _completed, fact_flights[distance_miles] )
+    ) * 100
+
+
+// ---------- Display folder: 4 Time intelligence (needs dim_date marked as date table) ----------
+Flights PM =
+CALCULATE ( [Total Flights], DATEADD ( dim_date[date], -1, MONTH ) )
+
+Flights MoM % =
+VAR _prev = [Flights PM]
+RETURN IF ( NOT ISBLANK ( _prev ), DIVIDE ( [Total Flights] - _prev, _prev ) )
+
+Flights MTD =
+TOTALMTD ( [Total Flights], dim_date[date] )
+
+Flights YTD =
+TOTALYTD ( [Total Flights], dim_date[date] )
+
+On-Time % PM =
+CALCULATE ( [On-Time %], DATEADD ( dim_date[date], -1, MONTH ) )
+
+On-Time % Change (pp) =
+IF ( NOT ISBLANK ( [On-Time % PM] ), [On-Time %] - [On-Time % PM] )
+
+Flights 7D Rolling Avg =
+AVERAGEX (
+    DATESINPERIOD ( dim_date[date], MAX ( dim_date[date] ), -7, DAY ),
+    [Total Flights]
+)
+
+
+// ---------- Display folder: 5 Ranking & share ----------
+// % of all airlines - ignores the airline filter but keeps every other filter
+Flights % of All Airlines =
+DIVIDE ( [Total Flights], CALCULATE ( [Total Flights], REMOVEFILTERS ( dim_airline ) ) )
+
+// % of grand total - ignores ALL filters on the fact (except those from slicers via ALLSELECTED)
+Flights % of Selection =
+DIVIDE ( [Total Flights], CALCULATE ( [Total Flights], ALLSELECTED () ) )
+
+Airline Rank by On-Time % =
+IF (
+    HASONEVALUE ( dim_airline[airline_name] ),
+    RANKX ( ALL ( dim_airline[airline_name] ), [On-Time %], , DESC, DENSE )
+)
+
+// Best airline name for a KPI card
+Best Airline (On-Time %) =
+VAR _t =
+    ADDCOLUMNS ( VALUES ( dim_airline[airline_name] ), "@otp", [On-Time %] )
+RETURN
+    MAXX ( TOPN ( 1, _t, [@otp], DESC ), dim_airline[airline_name] )
+
+
+// ---------- Display folder: 6 Origin vs destination (inactive relationship) ----------
+// Relationship fact_flights[origin_airport_code] -> dim_airport is ACTIVE.
+// Relationship fact_flights[dest_airport_code]  -> dim_airport is INACTIVE.
+Arrivals (by Destination) =
+CALCULATE (
+    [Total Flights],
+    USERELATIONSHIP ( fact_flights[dest_airport_code], dim_airport[airport_code] )
+)
+
+Avg Arrival Delay at Destination =
+CALCULATE (
+    [Avg Arrival Delay (min)],
+    USERELATIONSHIP ( fact_flights[dest_airport_code], dim_airport[airport_code] )
+)
+
+
+// ---------- Display folder: 7 UX helpers ----------
+Selected Airline Label =
+IF (
+    ISFILTERED ( dim_airline[airline_name] ),
+    CONCATENATEX ( VALUES ( dim_airline[airline_name] ), dim_airline[airline_name], ", " ),
+    "All airlines"
+)
+
+// Conditional formatting colour for On-Time % (use as Field value in Format > Colors)
+On-Time % Color =
+SWITCH (
+    TRUE (),
+    [On-Time %] >= 0.85, "#1B7F3B",
+    [On-Time %] >= 0.75, "#C98A00",
+    "#B42318"
+)
+
+Report Title =
+"Flight Performance – " & [Selected Airline Label]
