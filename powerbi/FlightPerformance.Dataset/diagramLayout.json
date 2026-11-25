@@ -1,0 +1,74 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 294,
+            "y": 81
+          },
+          "nodeIndex": "dim_airline",
+          "nodeLineageTag": "4d931595-c0f1-4236-8fc1-7e5ba2307a18",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 568,
+            "y": 19
+          },
+          "nodeIndex": "dim_airport",
+          "nodeLineageTag": "8f728d17-a99a-493a-95d3-6ecc463687a9",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 852,
+            "y": 5
+          },
+          "nodeIndex": "dim_date",
+          "nodeLineageTag": "b6969d12-6aa9-495c-99b9-72dc138266a1",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 10,
+            "y": -5
+          },
+          "nodeIndex": "fact_flights",
+          "nodeLineageTag": "e7377a3a-10ae-4cca-ae03-ba1819511dbe",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

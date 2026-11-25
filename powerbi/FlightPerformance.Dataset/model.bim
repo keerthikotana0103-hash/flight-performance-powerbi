@@ -1,0 +1,1496 @@
+{
+  "compatibilityLevel": 1550,
+  "model": {
+    "annotations": [
+      {
+        "name": "PBI_QueryOrder",
+        "value": "[\"dim_airline\",\"dim_airport\",\"dim_date\",\"fact_flights\"]"
+      },
+      {
+        "name": "__PBI_TimeIntelligenceEnabled",
+        "value": "1"
+      },
+      {
+        "name": "PBIDesktopVersion",
+        "value": "2.126.1261.0 (24.02)"
+      },
+      {
+        "name": "PBI_ProTooling",
+        "value": "[\"DevMode\"]"
+      }
+    ],
+    "culture": "en-US",
+    "cultures": [
+      {
+        "name": "en-US",
+        "linguisticMetadata": {
+          "content": {
+            "DynamicImprovement": "HighConfidence",
+            "Language": "en-US",
+            "Version": "1.0.0"
+          },
+          "contentType": "json"
+        }
+      }
+    ],
+    "dataAccessOptions": {
+      "legacyRedirects": true,
+      "returnErrorValuesAsNull": true
+    },
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "relationships": [
+      {
+        "name": "6dd15bfa-d818-44ea-b8e7-a87ffc9d64ca",
+        "fromColumn": "date",
+        "fromTable": "dim_date",
+        "joinOnDateBehavior": "datePartOnly",
+        "toColumn": "Date",
+        "toTable": "LocalDateTable_cae9d214-faa9-4497-a634-b623813dbd61"
+      },
+      {
+        "name": "e5e6a327-9713-4602-8044-34936374ae23",
+        "fromColumn": "flight_date",
+        "fromTable": "fact_flights",
+        "joinOnDateBehavior": "datePartOnly",
+        "toColumn": "Date",
+        "toTable": "LocalDateTable_b0f2f1bb-1bd1-4c36-953f-1f46cb9cd26f"
+      },
+      {
+        "name": "6ab12f1d-6e8d-4eb9-934a-05bf83764df8",
+        "fromColumn": "airline_code",
+        "fromTable": "fact_flights",
+        "toColumn": "airline_code",
+        "toTable": "dim_airline"
+      }
+    ],
+    "sourceQueryCulture": "en-US",
+    "tables": [
+      {
+        "name": "dim_airline",
+        "columns": [
+          {
+            "name": "airline_code",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "38374b4b-4f26-42d9-a067-b2ea04c90c36",
+            "sourceColumn": "airline_code",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "airline_name",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "d35bca71-214d-448d-adc8-e0ed6397cdf0",
+            "sourceColumn": "airline_name",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "4d931595-c0f1-4236-8fc1-7e5ba2307a18",
+        "partitions": [
+          {
+            "name": "dim_airline",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = DatabricksMultiCloud.Catalogs(\"dbc-19651ae1-4b1b.cloud.databricks.com\", \"/sql/1.0/warehouses/afdb0f274791569c\", [Catalog=null, Database=null, EnableAutomaticProxyDiscovery=null]),",
+                "    workspace_Database = Source{[Name=\"workspace\",Kind=\"Database\"]}[Data],",
+                "    flights_gold_Schema = workspace_Database{[Name=\"flights_gold\",Kind=\"Schema\"]}[Data],",
+                "    dim_airline_Table = flights_gold_Schema{[Name=\"dim_airline\",Kind=\"Table\"]}[Data]",
+                "in",
+                "    dim_airline_Table"
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "DateTableTemplate_da51c5b4-bedd-4c09-a167-3ad2729f035b",
+        "annotations": [
+          {
+            "name": "__PBI_TemplateDateTable",
+            "value": "true"
+          },
+          {
+            "name": "DefaultItem",
+            "value": "DateHierarchy"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Date",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "dataCategory": "PaddedDateTableDates",
+            "dataType": "dateTime",
+            "formatString": "General Date",
+            "isHidden": true,
+            "isNameInferred": true,
+            "lineageTag": "9472a2ff-e6c2-4896-9e4a-dce0a10729fe",
+            "sourceColumn": "[Date]",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          },
+          {
+            "name": "Year",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Year"
+              }
+            ],
+            "dataCategory": "Years",
+            "dataType": "int64",
+            "expression": "YEAR([Date])",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "46d329df-b79d-41b5-a041-9316655e242b",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "MonthNo",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "MonthNumber"
+              }
+            ],
+            "dataCategory": "MonthOfYear",
+            "dataType": "int64",
+            "expression": "MONTH([Date])",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "667fa18b-d151-4543-bbc4-7d6c7f55f69e",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Month",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Month"
+              }
+            ],
+            "dataCategory": "Months",
+            "dataType": "string",
+            "expression": "FORMAT([Date], \"MMMM\")",
+            "isHidden": true,
+            "lineageTag": "b9beeef3-3a6c-42f8-ad4c-4278c9f18825",
+            "sortByColumn": "MonthNo",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "QuarterNo",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "QuarterNumber"
+              }
+            ],
+            "dataCategory": "QuarterOfYear",
+            "dataType": "int64",
+            "expression": "INT(([MonthNo] + 2) / 3)",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "c5123b12-7d36-481d-a94c-241f92c3ef4c",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Quarter",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Quarter"
+              }
+            ],
+            "dataCategory": "Quarters",
+            "dataType": "string",
+            "expression": "\"Qtr \" & [QuarterNo]",
+            "isHidden": true,
+            "lineageTag": "49c0c300-0a60-4cab-83ef-6980840c1b53",
+            "sortByColumn": "QuarterNo",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Day",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Day"
+              }
+            ],
+            "dataCategory": "DayOfMonth",
+            "dataType": "int64",
+            "expression": "DAY([Date])",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "361fce75-ec9f-4fc7-8b0e-b0c519903627",
+            "summarizeBy": "none",
+            "type": "calculated"
+          }
+        ],
+        "hierarchies": [
+          {
+            "name": "Date Hierarchy",
+            "annotations": [
+              {
+                "name": "TemplateId",
+                "value": "DateHierarchy"
+              }
+            ],
+            "levels": [
+              {
+                "name": "Year",
+                "column": "Year",
+                "lineageTag": "13e110ea-ee3c-455c-b05a-8e43cea3f0ab",
+                "ordinal": 0
+              },
+              {
+                "name": "Quarter",
+                "column": "Quarter",
+                "lineageTag": "579ef655-37bd-4b4c-b2b8-dc58bac9d4db",
+                "ordinal": 1
+              },
+              {
+                "name": "Month",
+                "column": "Month",
+                "lineageTag": "98b17c42-040b-4198-aa90-93877857ac0c",
+                "ordinal": 2
+              },
+              {
+                "name": "Day",
+                "column": "Day",
+                "lineageTag": "8506cfe0-b627-4340-ba95-4f033955b5dc",
+                "ordinal": 3
+              }
+            ],
+            "lineageTag": "ba6ba9ba-adf3-4f87-ac67-0890a9b8e2e6"
+          }
+        ],
+        "isHidden": true,
+        "isPrivate": true,
+        "lineageTag": "06f7d279-4a61-4ecf-b5f7-2fd8940b35b7",
+        "partitions": [
+          {
+            "name": "DateTableTemplate_da51c5b4-bedd-4c09-a167-3ad2729f035b",
+            "mode": "import",
+            "source": {
+              "expression": "Calendar(Date(2015,1,1), Date(2015,1,1))",
+              "type": "calculated"
+            }
+          }
+        ]
+      },
+      {
+        "name": "dim_airport",
+        "columns": [
+          {
+            "name": "airport_code",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "87527d45-41f9-4e05-8168-aad85f88a5db",
+            "sourceColumn": "airport_code",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "airport_name",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "fb76d2e9-7751-4ad9-aca9-1b97e68b741b",
+            "sourceColumn": "airport_name",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "city",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "6101cae6-ab87-4692-884e-cc07e1b2551f",
+            "sourceColumn": "city",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "state",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "388d0d1f-4d3e-4b1a-8f97-d7e6f4fc3ec6",
+            "sourceColumn": "state",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "country",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "3119d1ea-d704-41fd-8872-e27e2b27573d",
+            "sourceColumn": "country",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "latitude",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ],
+            "dataType": "double",
+            "lineageTag": "38de2458-20ba-4561-ba2b-c5203a60c1da",
+            "sourceColumn": "latitude",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "longitude",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ],
+            "dataType": "double",
+            "lineageTag": "1828de0d-307e-4e8f-a65c-a5e3b49dc97b",
+            "sourceColumn": "longitude",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "city_state",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "a536c59f-4d89-4b09-85d7-6a6853c10324",
+            "sourceColumn": "city_state",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "8f728d17-a99a-493a-95d3-6ecc463687a9",
+        "partitions": [
+          {
+            "name": "dim_airport",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = DatabricksMultiCloud.Catalogs(\"dbc-19651ae1-4b1b.cloud.databricks.com\", \"/sql/1.0/warehouses/afdb0f274791569c\", [Catalog=null, Database=null, EnableAutomaticProxyDiscovery=null]),",
+                "    workspace_Database = Source{[Name=\"workspace\",Kind=\"Database\"]}[Data],",
+                "    flights_gold_Schema = workspace_Database{[Name=\"flights_gold\",Kind=\"Schema\"]}[Data],",
+                "    dim_airport_Table = flights_gold_Schema{[Name=\"dim_airport\",Kind=\"Table\"]}[Data]",
+                "in",
+                "    dim_airport_Table"
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "dim_date",
+        "columns": [
+          {
+            "name": "date",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "UnderlyingDateTimeDataType",
+                "value": "Date"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "Long Date",
+            "lineageTag": "82d4d220-60f8-4a27-bc75-674b3fc48532",
+            "sourceColumn": "date",
+            "summarizeBy": "none",
+            "variations": [
+              {
+                "name": "Variation",
+                "defaultHierarchy": {
+                  "hierarchy": "Date Hierarchy",
+                  "table": "LocalDateTable_cae9d214-faa9-4497-a634-b623813dbd61"
+                },
+                "isDefault": true,
+                "relationship": "6dd15bfa-d818-44ea-b8e7-a87ffc9d64ca"
+              }
+            ]
+          },
+          {
+            "name": "date_key",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "f02476e4-4fd0-4918-940d-22b9e6596746",
+            "sourceColumn": "date_key",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "year",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "c16c6281-ad6a-4a85-bdfc-a68a64115da2",
+            "sourceColumn": "year",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "quarter",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "3e404f72-0c92-4c59-966d-5038502deafe",
+            "sourceColumn": "quarter",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "quarter_name",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "010f49fa-a309-4244-b883-a0a3e6136794",
+            "sourceColumn": "quarter_name",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "month_number",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "4ae55b76-810e-4392-bdb2-275d5d88f4dd",
+            "sourceColumn": "month_number",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "month_name",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "e55f0481-fbca-4aed-9a5a-5ba5a8b67318",
+            "sourceColumn": "month_name",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "month_short",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "2cc3e869-b1af-4b23-a2b5-4eb6ad9ff696",
+            "sourceColumn": "month_short",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "year_month_key",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "447cc286-54a4-45c3-ac3d-ec909459f1af",
+            "sourceColumn": "year_month_key",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "year_month",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "cf62576a-9de5-4b46-8db0-e200f484e6a5",
+            "sourceColumn": "year_month",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "week_of_year",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "5b9034ff-c915-4408-b040-a320776a7e7a",
+            "sourceColumn": "week_of_year",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "day_of_month",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "38fc804b-1a0f-45c3-b9a3-25628deca955",
+            "sourceColumn": "day_of_month",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "day_of_week_number",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "6fc99ba2-9877-419c-87d3-10b99d05cc76",
+            "sourceColumn": "day_of_week_number",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "day_name",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "dea676f1-7484-4cfd-9368-f3da5bbe2a36",
+            "sourceColumn": "day_name",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "day_short",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "ba2a6d06-f0fd-4bc3-8133-dcb658a66de1",
+            "sourceColumn": "day_short",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "is_weekend",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "boolean",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "lineageTag": "2f54259d-751f-4231-9345-031abd257768",
+            "sourceColumn": "is_weekend",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "b6969d12-6aa9-495c-99b9-72dc138266a1",
+        "partitions": [
+          {
+            "name": "dim_date",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = DatabricksMultiCloud.Catalogs(\"dbc-19651ae1-4b1b.cloud.databricks.com\", \"/sql/1.0/warehouses/afdb0f274791569c\", [Catalog=null, Database=null, EnableAutomaticProxyDiscovery=null]),",
+                "    workspace_Database = Source{[Name=\"workspace\",Kind=\"Database\"]}[Data],",
+                "    flights_gold_Schema = workspace_Database{[Name=\"flights_gold\",Kind=\"Schema\"]}[Data],",
+                "    dim_date_Table = flights_gold_Schema{[Name=\"dim_date\",Kind=\"Table\"]}[Data]",
+                "in",
+                "    dim_date_Table"
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "LocalDateTable_cae9d214-faa9-4497-a634-b623813dbd61",
+        "annotations": [
+          {
+            "name": "__PBI_LocalDateTable",
+            "value": "true"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Date",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "dataCategory": "PaddedDateTableDates",
+            "dataType": "dateTime",
+            "formatString": "General Date",
+            "isHidden": true,
+            "isNameInferred": true,
+            "lineageTag": "bb5a0aab-6abb-4b2c-a473-4e3c92f08368",
+            "sourceColumn": "[Date]",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          },
+          {
+            "name": "Year",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Year"
+              }
+            ],
+            "dataCategory": "Years",
+            "dataType": "int64",
+            "expression": "YEAR([Date])",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "5aa5e429-bb97-4617-82ba-562d4e0aa755",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "MonthNo",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "MonthNumber"
+              }
+            ],
+            "dataCategory": "MonthOfYear",
+            "dataType": "int64",
+            "expression": "MONTH([Date])",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "de627f3d-ee8e-4c29-aa8b-9170810272f8",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Month",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Month"
+              }
+            ],
+            "dataCategory": "Months",
+            "dataType": "string",
+            "expression": "FORMAT([Date], \"MMMM\")",
+            "isHidden": true,
+            "lineageTag": "96e409dc-91b3-4c4f-bb10-fd7968bfd29b",
+            "sortByColumn": "MonthNo",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "QuarterNo",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "QuarterNumber"
+              }
+            ],
+            "dataCategory": "QuarterOfYear",
+            "dataType": "int64",
+            "expression": "INT(([MonthNo] + 2) / 3)",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "6aefd53e-c7b3-477d-8a13-a86772fd7b32",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Quarter",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Quarter"
+              }
+            ],
+            "dataCategory": "Quarters",
+            "dataType": "string",
+            "expression": "\"Qtr \" & [QuarterNo]",
+            "isHidden": true,
+            "lineageTag": "ca5d22ec-7ffc-4abf-b905-54953114f3c0",
+            "sortByColumn": "QuarterNo",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Day",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Day"
+              }
+            ],
+            "dataCategory": "DayOfMonth",
+            "dataType": "int64",
+            "expression": "DAY([Date])",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "7fdbe8a7-baf4-441b-b7f4-06b2285f4583",
+            "summarizeBy": "none",
+            "type": "calculated"
+          }
+        ],
+        "hierarchies": [
+          {
+            "name": "Date Hierarchy",
+            "annotations": [
+              {
+                "name": "TemplateId",
+                "value": "DateHierarchy"
+              }
+            ],
+            "levels": [
+              {
+                "name": "Year",
+                "column": "Year",
+                "lineageTag": "769ea1c2-118a-46cf-a79e-e064676e19f4",
+                "ordinal": 0
+              },
+              {
+                "name": "Quarter",
+                "column": "Quarter",
+                "lineageTag": "a361d622-9b6b-4a18-8847-a3a3891ce2f7",
+                "ordinal": 1
+              },
+              {
+                "name": "Month",
+                "column": "Month",
+                "lineageTag": "770a7f51-7333-493f-9ac5-cd417a570b17",
+                "ordinal": 2
+              },
+              {
+                "name": "Day",
+                "column": "Day",
+                "lineageTag": "7fac2640-5622-49c7-8b0f-73ae3b7c82f7",
+                "ordinal": 3
+              }
+            ],
+            "lineageTag": "7e2f3fce-628a-447a-b95c-08ab54d70fc3"
+          }
+        ],
+        "isHidden": true,
+        "lineageTag": "851b553f-51c4-4ce7-8279-7475ceabb921",
+        "partitions": [
+          {
+            "name": "LocalDateTable_cae9d214-faa9-4497-a634-b623813dbd61",
+            "mode": "import",
+            "source": {
+              "expression": "Calendar(Date(Year(MIN('dim_date'[date])), 1, 1), Date(Year(MAX('dim_date'[date])), 12, 31))",
+              "type": "calculated"
+            }
+          }
+        ],
+        "showAsVariationsOnly": true
+      },
+      {
+        "name": "fact_flights",
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "flight_date",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "UnderlyingDateTimeDataType",
+                "value": "Date"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "Long Date",
+            "lineageTag": "96b5e291-862b-4203-8b71-470506bd2432",
+            "sourceColumn": "flight_date",
+            "summarizeBy": "none",
+            "variations": [
+              {
+                "name": "Variation",
+                "defaultHierarchy": {
+                  "hierarchy": "Date Hierarchy",
+                  "table": "LocalDateTable_b0f2f1bb-1bd1-4c36-953f-1f46cb9cd26f"
+                },
+                "isDefault": true,
+                "relationship": "e5e6a327-9713-4602-8044-34936374ae23"
+              }
+            ]
+          },
+          {
+            "name": "airline_code",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "68c9f3df-9e24-4b42-a5a9-8e2f6d3b446f",
+            "sourceColumn": "airline_code",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "origin_airport_code",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "3494cb36-a241-40e6-afc7-c2663f33e9f0",
+            "sourceColumn": "origin_airport_code",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "dest_airport_code",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "abc54814-1c6c-4d80-b8b7-a57fddd85de8",
+            "sourceColumn": "dest_airport_code",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "route",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "39413985-f444-4e83-896d-d735a0b07d58",
+            "sourceColumn": "route",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "flight_number",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "765c0183-efe3-40e1-bb7b-b7449b9ad3bb",
+            "sourceColumn": "flight_number",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "tail_number",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "80be4f89-d4c5-4f45-9f87-baeee243c544",
+            "sourceColumn": "tail_number",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "sched_dep_hour",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "8d0919ba-336f-4cb5-9bd8-0a9eea24b8bc",
+            "sourceColumn": "sched_dep_hour",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "dep_delay_min",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "7e558930-70eb-4590-8d87-326442187d85",
+            "sourceColumn": "dep_delay_min",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "arr_delay_min",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "7f3fb0ab-04cc-46dd-9b9b-38b2715720ca",
+            "sourceColumn": "arr_delay_min",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "taxi_out_min",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "b2980d62-465d-4544-90b5-4f1ed0e27456",
+            "sourceColumn": "taxi_out_min",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "taxi_in_min",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "a085f4e7-7f86-4dd1-b674-d00b4b050c5b",
+            "sourceColumn": "taxi_in_min",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "air_time_min",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "d23bc013-11d7-4ace-9188-d8e74284e5fe",
+            "sourceColumn": "air_time_min",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "distance_miles",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "1fc2abdc-c4a3-4e25-a4aa-c9aba43f64c9",
+            "sourceColumn": "distance_miles",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "is_cancelled",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "e7715631-16d5-48f6-a895-9b2197355363",
+            "sourceColumn": "is_cancelled",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "is_diverted",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "6ea5caff-259b-4ce7-8827-fca33aadfbb3",
+            "sourceColumn": "is_diverted",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "is_on_time",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "7a0785fe-f0f7-4c1a-98c0-5c938d02dea3",
+            "sourceColumn": "is_on_time",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "cancellation_reason",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "dded0d20-819e-445a-bf66-ed2769496daf",
+            "sourceColumn": "cancellation_reason",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "delay_carrier_min",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "43109f90-2ae6-442c-aacd-24894749281c",
+            "sourceColumn": "delay_carrier_min",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "delay_weather_min",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "79277cb8-fc6c-432f-a408-865ba1823d0b",
+            "sourceColumn": "delay_weather_min",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "delay_nas_min",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "b3a91eca-5bcf-4225-8ff4-915680285fa8",
+            "sourceColumn": "delay_nas_min",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "delay_security_min",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "7f8ba0f3-40da-4a69-9ee8-cc3b15927410",
+            "sourceColumn": "delay_security_min",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "delay_late_aircraft_min",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "dbc7fb55-f214-428d-999c-807dd61d2a3f",
+            "sourceColumn": "delay_late_aircraft_min",
+            "summarizeBy": "sum"
+          }
+        ],
+        "lineageTag": "e7377a3a-10ae-4cca-ae03-ba1819511dbe",
+        "partitions": [
+          {
+            "name": "fact_flights",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = DatabricksMultiCloud.Catalogs(\"dbc-19651ae1-4b1b.cloud.databricks.com\", \"/sql/1.0/warehouses/afdb0f274791569c\", [Catalog=null, Database=null, EnableAutomaticProxyDiscovery=null]),",
+                "    workspace_Database = Source{[Name=\"workspace\",Kind=\"Database\"]}[Data],",
+                "    flights_gold_Schema = workspace_Database{[Name=\"flights_gold\",Kind=\"Schema\"]}[Data],",
+                "    fact_flights_Table = flights_gold_Schema{[Name=\"fact_flights\",Kind=\"Table\"]}[Data]",
+                "in",
+                "    fact_flights_Table"
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "LocalDateTable_b0f2f1bb-1bd1-4c36-953f-1f46cb9cd26f",
+        "annotations": [
+          {
+            "name": "__PBI_LocalDateTable",
+            "value": "true"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Date",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "dataCategory": "PaddedDateTableDates",
+            "dataType": "dateTime",
+            "formatString": "General Date",
+            "isHidden": true,
+            "isNameInferred": true,
+            "lineageTag": "3c4ad443-078c-4072-8d5e-edadd9b741df",
+            "sourceColumn": "[Date]",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          },
+          {
+            "name": "Year",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Year"
+              }
+            ],
+            "dataCategory": "Years",
+            "dataType": "int64",
+            "expression": "YEAR([Date])",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "11ed84e1-0c33-4d0e-9fb6-2f6498b79c92",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "MonthNo",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "MonthNumber"
+              }
+            ],
+            "dataCategory": "MonthOfYear",
+            "dataType": "int64",
+            "expression": "MONTH([Date])",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "1c5a18b2-b1e9-4a4d-995e-b27c5e100bdb",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Month",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Month"
+              }
+            ],
+            "dataCategory": "Months",
+            "dataType": "string",
+            "expression": "FORMAT([Date], \"MMMM\")",
+            "isHidden": true,
+            "lineageTag": "339e3996-1bd2-4102-ba39-5efcca2ccc37",
+            "sortByColumn": "MonthNo",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "QuarterNo",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "QuarterNumber"
+              }
+            ],
+            "dataCategory": "QuarterOfYear",
+            "dataType": "int64",
+            "expression": "INT(([MonthNo] + 2) / 3)",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "ad813aae-5822-4090-aeef-f67b7570a0ea",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Quarter",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Quarter"
+              }
+            ],
+            "dataCategory": "Quarters",
+            "dataType": "string",
+            "expression": "\"Qtr \" & [QuarterNo]",
+            "isHidden": true,
+            "lineageTag": "b521b877-aa3a-4138-b299-f44c7017b0d4",
+            "sortByColumn": "QuarterNo",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Day",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Day"
+              }
+            ],
+            "dataCategory": "DayOfMonth",
+            "dataType": "int64",
+            "expression": "DAY([Date])",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "03f828b9-0cdf-4b4e-9e4c-be59cb55df74",
+            "summarizeBy": "none",
+            "type": "calculated"
+          }
+        ],
+        "hierarchies": [
+          {
+            "name": "Date Hierarchy",
+            "annotations": [
+              {
+                "name": "TemplateId",
+                "value": "DateHierarchy"
+              }
+            ],
+            "levels": [
+              {
+                "name": "Year",
+                "column": "Year",
+                "lineageTag": "ee58d02e-07cb-40e9-a99b-232bae12ae5b",
+                "ordinal": 0
+              },
+              {
+                "name": "Quarter",
+                "column": "Quarter",
+                "lineageTag": "370f30b5-3e7f-4695-8e2b-cb12755654a9",
+                "ordinal": 1
+              },
+              {
+                "name": "Month",
+                "column": "Month",
+                "lineageTag": "9e5c19a8-946b-42a2-9291-6bdbfb41a5b1",
+                "ordinal": 2
+              },
+              {
+                "name": "Day",
+                "column": "Day",
+                "lineageTag": "e3caeee2-c4c3-4d45-8448-48fb0c972fcc",
+                "ordinal": 3
+              }
+            ],
+            "lineageTag": "04b4450b-7365-4a92-befe-ea2a17b6ca55"
+          }
+        ],
+        "isHidden": true,
+        "lineageTag": "03070a15-5117-40eb-b771-1cdcc1612587",
+        "partitions": [
+          {
+            "name": "LocalDateTable_b0f2f1bb-1bd1-4c36-953f-1f46cb9cd26f",
+            "mode": "import",
+            "source": {
+              "expression": "Calendar(Date(Year(MIN('fact_flights'[flight_date])), 1, 1), Date(Year(MAX('fact_flights'[flight_date])), 12, 31))",
+              "type": "calculated"
+            }
+          }
+        ],
+        "showAsVariationsOnly": true
+      }
+    ]
+  }
+}
